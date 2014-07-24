@@ -123,6 +123,20 @@ create table `adminsession` (
         $rows = $this->adapter->select_all('SELECT * FROM demo');
         $this->assertEquals(2, count($rows));
 
+        // test multiple queries with a semicolon and comment out single quotes inside quotes
+        $base->execute("
+            DROP TABLE IF EXISTS `demo`;
+            CREATE TABLE `demo` (
+              `id` INT(11) NOT NULL AUTO_INCREMENT,
+              `name` VARCHAR(100) NOT NULL,
+              PRIMARY KEY (`id`)
+            );
+            INSERT INTO demo(id, name) VALUES(1,'hello world\'s a funny; thing');
+            INSERT INTO demo(id, name) VALUES(2,'b\';\'b');
+        ");
+        $rows = $this->adapter->select_all('SELECT * FROM demo');
+        $this->assertEquals(2, count($rows));
+
         // cleanup
         $base->execute("DROP TABLE `admin`; DROP TABLE `adminsession`; DROP TABLE `demo`;");
         

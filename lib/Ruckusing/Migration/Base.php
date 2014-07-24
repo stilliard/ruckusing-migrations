@@ -247,7 +247,7 @@ class Ruckusing_Migration_Base
                 $buffer = null;
                 continue;
             }
-            if ($query[$i] == "'") {
+            if ($query[$i] == "'" && $query[$i-1] != "\\") {
                 $open = ($open) ? false: true;
             }
             $buffer .= $query[$i];
